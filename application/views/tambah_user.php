@@ -39,9 +39,8 @@
                 <label>Koneksi</label>
                 <select name="koneksi" id="koneksi" class="form-control">
                     <option value="">-- Pilih Koneksi --</option>
-                    <?php foreach ($tipe_koneksi as $koneksi): ?>
-                        <option value="<?= $koneksi->koneksi ?>"><?= $koneksi->koneksi ?></option>
-                    <?php endforeach; ?>
+                    <option value="Fiber Optic">Fiber Optic</option>
+                    <option value="Wireless">Wireless</option>
                 </select>
                 <?= form_error('koneksi', '<div class="text-small text-danger">', '</div>'); ?>
             </div>
@@ -71,21 +70,12 @@
 
             <div class="form-group">
                 <label>Kategori</label>
-                <select name="kategori_id" class="form-control">
-                    <option value="">-- Select Kategori --</option>
-                    <?php
-                    $kategori_terpakai = [];
-                    foreach ($kategori as $kt):
-                        if (!in_array($kt->namakategori, $kategori_terpakai)):
-                            $kategori_terpakai[] = $kt->namakategori;
-                    ?>
-                            <option value="<?= $kt->id_kategori ?>"><?= $kt->namakategori ?> </option>
-                    <?php
-                        endif;
-                    endforeach;
-                    ?>
+                <select name="kategori" class="form-control">
+                    <option value="">-- Pilih Kategori --</option>
+                    <option value="Broadband">Broadband</option>
+                    <option value="Dedicated">Dedicated</option>
                 </select>
-                <?= form_error('kategori_id', '<div class="text-small text-danger">', '</div>'); ?>
+                <?= form_error('kategori', '<div class="text-small text-danger">', '</div>'); ?>
             </div>
 
             <div class="form-group">

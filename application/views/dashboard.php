@@ -56,6 +56,39 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <!-- User Aktif -->
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4 text-white">
+                <div class="small-box" style="background-color: rgb(51, 102, 232);">
+                    <div class="inner">
+                        <h3><?= $total_user_aktif; ?></h3>
+                        <p>User Aktif</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <a href="<?= base_url('user?status=aktif') ?>" class="small-box-footer">
+                        More Info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Total Voucher -->
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4 text-white">
+                <div class="small-box" style="background-color: #FF2E63;">
+                    <div class="inner">
+                        <h3><?= $total_voucher; ?></h3>
+                        <p>Jumlah Voucher</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <a href="<?= base_url('user?type=voucher') ?>" class="small-box-footer">
+                        More Info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
 </section>
 
 

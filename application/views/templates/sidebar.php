@@ -115,14 +115,6 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="<?= base_url('kategori') ?>"
-                class="nav-link <?php if ($this->uri->segment(1) == 'kategori') echo 'active'; ?>"
-                style="<?php if ($this->uri->segment(1) == 'kategori') echo 'background-color: #6c757d; color: white;'; ?>">
-                <i class="nav-icon fas fa-door-open"></i>
-                <p>Kategori</p>
-              </a>
-            </li>
-            <li class="nav-item">
               <a href="<?= base_url('sesi') ?>"
                 class="nav-link <?php if ($this->uri->segment(1) == 'sesi') echo 'active'; ?>"
                 style="<?php if ($this->uri->segment(1) == 'sesi') echo 'background-color: #6c757d; color: white;'; ?>">

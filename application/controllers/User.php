@@ -26,7 +26,6 @@ class User extends CI_Controller
         $data['user'] = $this->user_model->get_user_filtered($type);
         $data['bandwith'] = $this->db->get('bandwith')->result();
         $data['sesi'] = $this->db->get('sesi')->result();
-        $data['kategori'] = $this->db->get('kategori')->result();
         $data['site'] = $this->site_model->get_all();
 
         $this->load->view('templates/header', $data);
@@ -47,17 +46,12 @@ class User extends CI_Controller
         echo json_encode($user ? $user : ['error' => 'User not found']);
     }
 
-
     public function tambah()
     {
         $data['title'] = 'Tambah User';
         $data['bandwith'] = $this->db->get('bandwith')->result();
         $data['sesi'] = $this->db->get('sesi')->result();
-        $data['kategori'] = $this->db->get('kategori')->result();
         $data['site'] = $this->site_model->get_all();
-
-        // Ambil nilai unik dari kolom tipe_kategori
-        $data['tipe_koneksi'] = $this->db->select('DISTINCT(tipe_kategori) as koneksi')->from('kategori')->get()->result();
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
@@ -65,10 +59,9 @@ class User extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-
     public function tambah_aksi()
     {
-        $this->form_validation->set_rules('username', 'Username', 'required');
+        $this->form_validation->set_rules('username', 'Username', 'required|is_unique[user.username]');
         $this->form_validation->set_rules('password', 'Password', 'required');
         $this->form_validation->set_rules('expiration', 'Expiration', 'required');
         $this->form_validation->set_rules('simuluse', 'Simultaneous Use', 'required');
@@ -85,9 +78,11 @@ class User extends CI_Controller
                 'simuluse' => $this->input->post('simuluse'),
                 'bandwith_id' => $this->input->post('bandwith_id'),
                 'sesi_id' => $this->input->post('sesi_id'),
+                'kategori' => $this->input->post('kategori'),
+                'koneksi' => $this->input->post('koneksi'),
             ];
 
-            $optional_fields = ['nama_pelanggan', 'alamat', 'nomor_hp', 'ipaddress', 'kategori_id', 'site_id'];
+            $optional_fields = ['nama_pelanggan', 'alamat', 'nomor_hp', 'ipaddress', 'site_id'];
             foreach ($optional_fields as $field) {
                 $value = $this->input->post($field);
                 if (!empty($value)) {
@@ -103,55 +98,67 @@ class User extends CI_Controller
 
     public function edit($id_user)
     {
+        // Validasi minimal input
         $this->form_validation->set_rules('bandwith_id', 'Layanan', 'required');
         $this->form_validation->set_rules('sesi_id', 'Sesi', 'required');
-        $this->form_validation->set_rules('username', 'Username', 'required');
+
+        // Ambil data user berdasarkan ID
+        $existing = $this->user_model->getUserById($id_user);
 
         if ($this->form_validation->run() == FALSE) {
-            $data['user'] = $this->user_model->getUserById($id_user);
+            $data['title'] = 'Edit User';
+            $data['edit_user'] = $existing;
             $data['bandwith'] = $this->db->get('bandwith')->result();
             $data['sesi'] = $this->db->get('sesi')->result();
-            $data['kategori'] = $this->db->get('kategori')->result();
             $data['site'] = $this->site_model->get_all();
-
-            // Ambil semua koneksi unik dari tipe_kategori di tabel kategori
-            $data['tipe_koneksi'] = $this->db
-                ->select('DISTINCT(tipe_kategori) as koneksi')
-                ->from('kategori')
-                ->get()
-                ->result();
 
             $this->load->view('templates/header', $data);
             $this->load->view('templates/sidebar', $data);
-            $this->load->view('user', $data); // Modal edit berada di dalam view 'user.php'
+            $this->load->view('edit_user', $data);
             $this->load->view('templates/footer');
         } else {
+            // Fungsi bantu untuk cek kosong
+            function get_input_or_existing($input, $existing_value)
+            {
+                $val = trim($input);
+                return $val !== '' ? $val : $existing_value;
+            }
+
+            // Update data
             $update_data = [
-                'nama_pelanggan' => $this->input->post('nama_pelanggan'),
-                'alamat' => $this->input->post('alamat'),
-                'nomor_hp' => $this->input->post('nomor_hp'),
-                'username' => $this->input->post('username'),
-                'password' => $this->input->post('password'),
-                'expiration' => $this->input->post('expiration'),
-                'simuluse' => $this->input->post('simuluse'),
-                'ipaddress' => $this->input->post('ipaddress'),
-                'kategori_id' => $this->input->post('kategori_id'),
-                'site_id' => $this->input->post('site_id'),
-                'bandwith_id' => $this->input->post('bandwith_id'),
-                'sesi_id' => $this->input->post('sesi_id'),
-                'koneksi' => $this->input->post('koneksi') // tambahkan field koneksi
+                'nama_pelanggan' => get_input_or_existing($this->input->post('nama_pelanggan'), $existing->nama_pelanggan),
+                'alamat'         => get_input_or_existing($this->input->post('alamat'), $existing->alamat),
+                'nomor_hp'       => get_input_or_existing($this->input->post('nomor_hp'), $existing->nomor_hp),
+                'username'       => $existing->username, // tidak diubah
+                'expiration'     => get_input_or_existing($this->input->post('expiration'), $existing->expiration),
+                'simuluse'       => get_input_or_existing($this->input->post('simuluse'), $existing->simuluse),
+                'ipaddress'      => get_input_or_existing($this->input->post('ipaddress'), $existing->ipaddress),
+                'site_id'        => get_input_or_existing($this->input->post('site_id'), $existing->site_id),
+                'bandwith_id'    => get_input_or_existing($this->input->post('bandwith_id'), $existing->bandwith_id),
+                'sesi_id'        => get_input_or_existing($this->input->post('sesi_id'), $existing->sesi_id),
+                'kategori'       => get_input_or_existing($this->input->post('kategori'), $existing->kategori),
+                'koneksi'        => get_input_or_existing($this->input->post('koneksi'), $existing->koneksi),
             ];
 
-            $where = ['id_user' => $id_user];
-            $this->user_model->update_data($where, $update_data, 'user');
+            // Password plaintext (tidak di-hash)
+            $password = $this->input->post('password');
+            $update_data['password'] = trim($password) !== '' ? $password : $existing->password;
 
+            // Simpan ke database
+            $this->user_model->update_data($id_user, $update_data);
             $this->session->set_flashdata('pesan', 'Data berhasil diperbarui!');
             redirect('user');
         }
     }
 
+
     public function delete($id)
     {
+        if ($this->session->userdata('role') !== 'admin') {
+            $this->session->set_flashdata('pesan', 'Akses ditolak.');
+            redirect('user');
+        }
+
         $where = ['id_user' => $id];
         $this->user_model->delete($where, 'user');
         $this->session->set_flashdata('pesan', 'Data berhasil dihapus.');

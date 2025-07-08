@@ -44,10 +44,10 @@
               <td><?= htmlspecialchars($ssw->nama_pelanggan, ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= htmlspecialchars($ssw->username, ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= htmlspecialchars($ssw->expiration, ENT_QUOTES, 'UTF-8') ?></td>
-              <td><?= htmlspecialchars($ssw->namakategori, ENT_QUOTES, 'UTF-8') ?></td>
+              <td><?= htmlspecialchars($ssw->kategori, ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= htmlspecialchars($ssw->site, ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= htmlspecialchars($ssw->type, ENT_QUOTES, 'UTF-8') ?></td>
-              <td><?= htmlspecialchars($ssw->tipe_kategori, ENT_QUOTES, 'UTF-8') ?></td>
+              <td><?= htmlspecialchars($ssw->koneksi, ENT_QUOTES, 'UTF-8') ?></td>
               <td><?= htmlspecialchars($ssw->namapaket, ENT_QUOTES, 'UTF-8') ?></td>
               <td>Rp. <?= number_format((float) str_replace('.', '', $ssw->tarif), 0, ',', '.') ?></td>
               <td><?= htmlspecialchars($ssw->namasesi, ENT_QUOTES, 'UTF-8') ?></td>
@@ -63,10 +63,11 @@
                   data-alamat="<?= htmlspecialchars($ssw->alamat, ENT_QUOTES, 'UTF-8') ?>"
                   data-nomor_hp="<?= htmlspecialchars($ssw->nomor_hp, ENT_QUOTES, 'UTF-8') ?>"
                   data-ipaddress="<?= htmlspecialchars($ssw->ipaddress, ENT_QUOTES, 'UTF-8') ?>"
+                  data-koneksi="<?= $ssw->koneksi ?>"
                   data-simuluse="<?= $ssw->simuluse ?>"
                   data-expiration="<?= date('Y-m-d\TH:i', strtotime($ssw->expiration)) ?>"
                   data-site_id="<?= $ssw->site_id ?>"
-                  data-kategori_id="<?= $ssw->kategori_id ?>"
+                  data-kategori="<?= $ssw->kategori ?>"
                   data-bandwith_id="<?= $ssw->bandwith_id ?>"
                   data-tarif="<?= $ssw->tarif ?>"
                   data-sesi_id="<?= $ssw->sesi_id ?>"
@@ -88,139 +89,131 @@
       </table>
     </div>
   </div>
-</div>
 
-<!-- Modal Edit User -->
-<div class="modal fade" id="modalEditUser" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <form action="<?= base_url('user/edit/' . $ssw->id_user) ?>" method="post">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Edit Data User</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span>&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" name="id_user" id="edit_id_user">
-          <div class="row">
-            <!-- Kolom 1 -->
-            <div class="col-md-4">
-              <div class="form-group">
-                <label>Nama Pelanggan</label>
-                <input type="text" name="nama_pelanggan" id="edit_nama" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>Alamat</label>
-                <input type="text" name="alamat" id="edit_alamat" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>Nomor HP</label>
-                <input type="text" name="nomor_hp" id="edit_nomor_hp" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>IP Address</label>
-                <input type="text" name="ipaddress" id="edit_ipaddress" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>Koneksi</label>
-                <select name="kategori_id" id="kategori_id" class="form-control">
-                  <option value="">-- Pilih Koneksi --</option>
-                  <?php
-                  $tipe_kategori_terpakai = [];
-                  foreach ($kategori as $kt):
-                    if (!in_array($kt->tipe_kategori, $tipe_kategori_terpakai)):
-                      $tipe_kategori_terpakai[] = $kt->tipe_kategori;
-                  ?>
-                      <option value="<?= $kt->id_kategori ?>"><?= $kt->tipe_kategori ?></option>
-                  <?php
-                    endif;
-                  endforeach;
-                  ?>
-                </select>
-              </div>
-            </div>
+  <!-- Modal Edit User -->
+  <div class="modal fade" id="modalEditUser" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <form id="formEditUser" action="" method="post">
 
-            <!-- Kolom 2 -->
-            <div class="col-md-4">
-              <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" id="edit_username" class="form-control" readonly>
-              </div>
-              <div class="form-group">
-                <label>Password</label>
-                <div class="input-group">
-                  <input type="password" name="password" id="edit_password" class="form-control password-field">
-                  <div class="input-group-append">
-                    <span class="input-group-text toggle-password" style="cursor: pointer;">
-                      <i class="fa fa-eye" id="toggle-password-icon"></i>
-                    </span>
-                  </div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Data User</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="id_user" id="edit_id_user">
+            <div class="row">
+              <!-- Kolom 1 -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Nama Pelanggan</label>
+                  <input type="text" name="nama_pelanggan" id="edit_nama" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>Alamat</label>
+                  <input type="text" name="alamat" id="edit_alamat" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>Nomor HP</label>
+                  <input type="text" name="nomor_hp" id="edit_nomor_hp" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>IP Address</label>
+                  <input type="text" name="ipaddress" id="edit_ipaddress" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>Koneksi</label>
+                  <select name="koneksi" id="edit_koneksi" class="form-control">
+                    <option value="">-- Pilih Koneksi --</option>
+                    <option value="Fiber Optic">Fiber Optic</option>
+                    <option value="Wireless">Wireless</option>
+                  </select>
+                  <?= form_error('koneksi', '<div class="text-small text-danger">', '</div>'); ?>
                 </div>
               </div>
-              <div class="form-group">
-                <label>Expiration</label>
-                <input type="datetime-local" name="expiration" id="edit_expiration" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>Simultaneous-Use</label>
-                <input type="number" name="simuluse" id="edit_simuluse" class="form-control">
-              </div>
-              <div class="form-group">
-                <label>Tarif (Rp)</label>
-                <input type="text" class="form-control" id="edit_tarif" readonly>
-              </div>
-            </div>
 
-            <!-- Kolom 3 -->
-            <div class="col-md-4">
-              <div class="form-group">
-                <label>Site</label>
-                <!-- Tampilkan nama site (tidak bisa diedit) -->
-                <input type="text" class="form-control" value="<?= $ssw->site ?>" readonly>
-                <!-- Kirim ID site secara tersembunyi ke backend -->
-                <input type="hidden" name="site_id" value="<?= $ssw->site_id ?>">
+              <!-- Kolom 2 -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Username</label>
+                  <input type="text" name="username" id="edit_username" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <div class="input-group">
+                    <input type="password" name="password" id="edit_password" class="form-control password-field">
+                    <div class="input-group-append">
+                      <span class="input-group-text toggle-password" style="cursor: pointer;">
+                        <i class="fa fa-eye" id="toggle-password-icon"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Expiration</label>
+                  <input type="datetime-local" name="expiration" id="edit_expiration" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>Simultaneous-Use</label>
+                  <input type="number" name="simuluse" id="edit_simuluse" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label>Tarif (Rp)</label>
+                  <input type="text" class="form-control" id="edit_tarif" readonly>
+                </div>
               </div>
 
-              <div class="form-group">
-                <label>Kategori</label>
-                <select name="kategori_id" id="edit_kategori_id" class="form-control">
-                  <?php foreach ($kategori as $kt): ?>
-                    <option value="<?= $kt->id_kategori ?>"><?= $kt->namakategori ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Layanan</label>
-                <select name="bandwith_id" id="edit_bandwith_id" class="form-control">
-                  <?php foreach ($bandwith as $bw): ?>
-                    <option value="<?= $bw->id_bw ?>" data-harga="<?= $bw->harga ?>">
-                      <?= $bw->namapaket ?>
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Sesi</label>
-                <select name="sesi_id" id="edit_sesi_id" class="form-control">
-                  <?php foreach ($sesi as $si): ?>
-                    <option value="<?= $si->id_sesi ?>"><?= $si->namasesi ?></option>
-                  <?php endforeach; ?>
-                </select>
+              <!-- Kolom 3 -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Site</label>
+                  <!-- Tampilkan nama site (tidak bisa diedit) -->
+                  <input type="text" class="form-control" value="<?= $ssw->site ?>" readonly>
+                  <!-- Kirim ID site secara tersembunyi ke backend -->
+                  <input type="hidden" name="site_id" id="edit_site_id">
+                </div>
+                <div class="form-group">
+                  <label>Kategori</label>
+                  <select name="kategori" id="edit_kategori" class="form-control">
+                    <option value="">-- Pilih Kategori --</option>
+                    <option value="Broadband">Broadband</option>
+                    <option value="Dedicated">Dedicated</option>
+                  </select>
+                  <?= form_error('kategori', '<div class="text-small text-danger">', '</div>'); ?>
+                </div>
+                <div class="form-group">
+                  <label>Layanan</label>
+                  <select name="bandwith_id" id="edit_bandwith_id" class="form-control">
+                    <?php foreach ($bandwith as $bw): ?>
+                      <option value="<?= $bw->id_bw ?>" data-harga="<?= $bw->harga ?>">
+                        <?= $bw->namapaket ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Sesi</label>
+                  <select name="sesi_id" id="edit_sesi_id" class="form-control">
+                    <?php foreach ($sesi as $si): ?>
+                      <option value="<?= $si->id_sesi ?>"><?= $si->namasesi ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
-
 
 <script>
   $(document).ready(function() {
@@ -271,34 +264,43 @@
 
   $(document).ready(function() {
     $('.btn-edit-user').on('click', function() {
-      $('#edit_id_user').val($(this).data('id'));
+      let idUser = $(this).data('id');
+      $('#formEditUser').attr('action', '<?= base_url('user/edit/') ?>' + idUser);
+
+      // Set semua nilai form modal edit
+      $('#edit_id_user').val(idUser);
       $('#edit_nama').val($(this).data('nama'));
       $('#edit_username').val($(this).data('username'));
       $('#edit_password').val($(this).data('password'));
       $('#edit_alamat').val($(this).data('alamat'));
       $('#edit_nomor_hp').val($(this).data('nomor_hp'));
       $('#edit_ipaddress').val($(this).data('ipaddress'));
+      $('#edit_koneksi').val($(this).data('koneksi'));
       $('#edit_simuluse').val($(this).data('simuluse'));
       $('#edit_expiration').val($(this).data('expiration'));
       $('#edit_site_id').val($(this).data('site_id'));
-      $('#edit_kategori_id').val($(this).data('kategori_id'));
+      $('#edit_kategori').val($(this).data('kategori'));
+
+      // 👉 PENTING: Letakkan di sini
       $('#edit_bandwith_id').val($(this).data('bandwith_id')).trigger('change');
+
       $('#edit_sesi_id').val($(this).data('sesi_id'));
 
-      let raw = $(this).data('tarif');
-      let formatted = 'Rp. ' + new Intl.NumberFormat('id-ID').format(parseInt(raw.replace(/\D/g, '')));
+      let raw = $(this).data('tarif') || 0;
+      let formatted = 'Rp. ' + new Intl.NumberFormat('id-ID').format(parseInt(raw));
       $('#edit_tarif').val(formatted);
     });
+  });
 
-    $('#edit_bandwith_id').on('change', function() {
-      let harga = $(this).find(':selected').data('harga');
-      if (harga) {
-        let formatted = 'Rp. ' + new Intl.NumberFormat('id-ID').format(parseInt(harga.replace(/\D/g, '')));
-        $('#edit_tarif').val(formatted);
-      } else {
-        $('#edit_tarif').val('');
-      }
-    });
+
+  $('#edit_bandwith_id').on('change', function() {
+    let harga = $(this).find(':selected').data('harga');
+    if (harga) {
+      let formatted = 'Rp. ' + new Intl.NumberFormat('id-ID').format(harga);
+      $('#edit_tarif').val(formatted);
+    } else {
+      $('#edit_tarif').val('');
+    }
   });
 
   $(document).ready(function() {

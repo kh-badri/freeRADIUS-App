@@ -1,4 +1,5 @@
 <?php
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Dashboard extends CI_Controller
 {
@@ -6,37 +7,33 @@ class Dashboard extends CI_Controller
     {
         parent::__construct();
         $this->load->library('session');
-        $this->load->database(); // Pastikan database sudah dimuat
+        $this->load->database(); // Memastikan koneksi database tersedia
         $this->check_login(); // Pastikan user sudah login
     }
 
-    // Fungsi untuk cek login
+    // Fungsi untuk cek apakah user sudah login
     private function check_login()
     {
         if (!$this->session->userdata('logged_in')) {
-            redirect('auth/login'); // Redirect ke login jika belum login
+            redirect('auth/login');
         }
     }
 
-    // Fungsi untuk menampilkan dashboard
+    // Fungsi utama untuk menampilkan dashboard
     public function index()
     {
         $data['title'] = 'Dashboard';
-        $data['dark_mode'] = true; // Aktifkan dark mode
+        $data['dark_mode'] = true;
 
-        $data['title'] = 'Dashboard';
-
-        // Menambahkan flashdata pesan sukses login jika ada
+        // Flashdata jika ada pesan sukses atau error
         if ($this->session->flashdata('success')) {
             $data['success_message'] = $this->session->flashdata('success');
         }
-
-        // Menambahkan flashdata pesan error jika ada
         if ($this->session->flashdata('error')) {
             $data['error_message'] = $this->session->flashdata('error');
         }
 
-        // Query untuk menghitung jumlah user dan voucher
+        // Query: jumlah user dan jumlah voucher
         $query_user_voucher = $this->db->query("
             SELECT 
                 SUM(CASE WHEN type IS NULL OR type != 'voucher' THEN 1 ELSE 0 END) AS total_user,
@@ -45,35 +42,43 @@ class Dashboard extends CI_Controller
         ");
         $result_user_voucher = $query_user_voucher->row();
 
-        // Query untuk menghitung jumlah layanan dari tabel bandwidth
+        // Query: jumlah user aktif (berdasarkan expiration)
+        $query_user_aktif = $this->db->query("
+            SELECT COUNT(*) AS total_user_aktif 
+            FROM user 
+            WHERE expiration >= CURDATE()
+        ");
+        $result_user_aktif = $query_user_aktif->row();
+
+        // Query: jumlah layanan
         $query_bandwith = $this->db->query("SELECT COUNT(*) AS total_layanan FROM bandwith");
         $result_bandwith = $query_bandwith->row();
 
-        // Query untuk menghitung jumlah kategori dari tabel kategori
+        // Query: jumlah kategori
         $query_kategori = $this->db->query("SELECT COUNT(*) AS total_kategori FROM kategori");
         $result_kategori = $query_kategori->row();
 
-        // Query untuk menghitung jumlah nas dari tabel nas
+        // Query: jumlah NAS
         $query_nas = $this->db->query("SELECT COUNT(*) AS total_nas FROM nas");
         $result_nas = $query_nas->row();
 
-        // Query untuk menghitung jumlah sesi dari tabel sesi
+        // Query: jumlah sesi
         $query_sesi = $this->db->query("SELECT COUNT(*) AS total_sesi FROM sesi");
         $result_sesi = $query_sesi->row();
 
-
-        // Menyimpan hasil query ke dalam array data
+        // Kirim semua data ke view
         $data['total_user'] = $result_user_voucher->total_user;
         $data['total_voucher'] = $result_user_voucher->total_voucher;
+        $data['total_user_aktif'] = $result_user_aktif->total_user_aktif;
         $data['total_layanan'] = $result_bandwith->total_layanan;
         $data['total_kategori'] = $result_kategori->total_kategori;
         $data['total_nas'] = $result_nas->total_nas;
         $data['total_sesi'] = $result_sesi->total_sesi;
 
-        // Kirim data ke view
+        // Load semua view
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
-        $this->load->view('dashboard', $data); // Mengirimkan data ke view
+        $this->load->view('dashboard', $data);
         $this->load->view('templates/footer');
     }
 }
