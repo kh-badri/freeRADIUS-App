@@ -12,7 +12,7 @@
         <!-- Small boxes (Stat box) -->
         <div class="row">
             <!-- Total Nas -->
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4 text-white">
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
                 <div class="small-box" style="background-color:rgb(51, 102, 232);">
                     <div class="inner">
                         <h3><?= $total_nas; ?></h3>
@@ -25,7 +25,7 @@
                 </div>
             </div>
             <!-- Total Voucher -->
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4 text-white">
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
                 <div class="small-box" style="background-color: #FF2E63;">
                     <div class="inner">
                         <h3><?= $total_voucher; ?></h3>
@@ -41,7 +41,7 @@
             </div>
 
             <!-- Total User -->
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4">
                 <div class="small-box bg-warning text-white">
                     <div class="inner">
                         <h3><?= $total_user; ?></h3>
@@ -55,11 +55,8 @@
                     </a>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
             <!-- User Aktif -->
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4 text-white">
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
                 <div class="small-box" style="background-color: rgb(51, 102, 232);">
                     <div class="inner">
                         <h3><?= $total_user_aktif; ?></h3>
@@ -73,6 +70,9 @@
                     </a>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
 
             <!-- Total Voucher -->
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4 text-white">

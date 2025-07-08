@@ -207,7 +207,12 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+
+            <?php if ($this->session->userdata('role') === 'admin'): ?>
+              <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+            <?php else: ?>
+              <button type="button" class="btn btn-success" onclick="showAccessDeniedAlert()">Simpan Perubahan</button>
+            <?php endif; ?>
           </div>
         </div>
       </form>
