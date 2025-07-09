@@ -11,41 +11,12 @@
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-            <!-- Total Nas -->
-            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
-                <div class="small-box" style="background-color:rgb(51, 102, 232);">
-                    <div class="inner">
-                        <h3><?= $total_nas; ?></h3>
-                        <p>Jumlah Nas <i class="" aria-hidden="true"></i></p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <a href="<?= base_url('nas') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- Total Voucher -->
-            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
-                <div class="small-box" style="background-color: #FF2E63;">
-                    <div class="inner">
-                        <h3><?= $total_voucher; ?></h3>
-                        <p>Jumlah Voucher</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-ticket-alt"></i>
-                    </div>
-                    <a href="<?= base_url('user?type=voucher') ?>" class="small-box-footer">
-                        More Info <i class="fas fa-arrow-circle-right"></i>
-                    </a>
-                </div>
-            </div>
-
             <!-- Total User -->
-            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4">
-                <div class="small-box bg-warning text-white">
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
+                <div class="small-box text-white" style="background-color:rgb(7, 90, 122);">
                     <div class="inner">
                         <h3><?= $total_user; ?></h3>
-                        <p>Jumlah User</p>
+                        <p>Total User</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-users"></i>
@@ -56,8 +27,8 @@
                 </div>
             </div>
             <!-- User Aktif -->
-            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
-                <div class="small-box" style="background-color: rgb(51, 102, 232);">
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4 text-white">
+                <div class="small-box" style="background-color: rgb(13, 161, 63);">
                     <div class="inner">
                         <h3><?= $total_user_aktif; ?></h3>
                         <p>User Aktif</p>
@@ -65,21 +36,34 @@
                     <div class="icon">
                         <i class="fas fa-user-check"></i>
                     </div>
-                    <a href="<?= base_url('user?status=aktif') ?>" class="small-box-footer">
+                    <a href="<?= base_url('user?type=home&status=aktif') ?>" class="small-box-footer text-white">
                         More Info <i class="fas fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
+            <!-- User Expired -->
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4 text-white">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3><?= $total_user_expired; ?></h3>
+                        <p>User Expired</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-times"></i>
+                    </div>
+                    <a href="<?= base_url('user?type=home&status=expired') ?>" class="small-box-footer text-white">
+                        More Info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
 
             <!-- Total Voucher -->
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-4 text-white">
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
                 <div class="small-box" style="background-color: #FF2E63;">
                     <div class="inner">
                         <h3><?= $total_voucher; ?></h3>
-                        <p>Jumlah Voucher</p>
+                        <p>Total Voucher</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-ticket-alt"></i>
@@ -87,6 +71,49 @@
                     <a href="<?= base_url('user?type=voucher') ?>" class="small-box-footer">
                         More Info <i class="fas fa-arrow-circle-right"></i>
                     </a>
+                </div>
+            </div>
+            <!-- Voucher Aktif -->
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
+                <div class="small-box" style="background-color: rgb(13, 161, 63);">
+                    <div class="inner">
+                        <h3><?= $total_voucher_aktif; ?></h3>
+                        <p>Voucher Aktif</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-hourglass-end"></i>
+                    </div>
+                    <a href="<?= base_url('user?type=voucher&status=aktif') ?>" class="small-box-footer text-white">
+                        More Info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Voucher Expired -->
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3><?= $total_voucher_expired; ?></h3>
+                        <p>Voucher Expired</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <a href="<?= base_url('user?type=voucher&status=expired') ?>" class="small-box-footer text-white">
+                        More Info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Total Nas -->
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
+                <div class="small-box" style="background-color:rgb(96, 93, 93);">
+                    <div class="inner">
+                        <h3><?= $total_nas; ?></h3>
+                        <p>Total Nas <i class="" aria-hidden="true"></i></p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <a href="<?= base_url('nas') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 </section>

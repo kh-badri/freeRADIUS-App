@@ -21,9 +21,10 @@ class User extends CI_Controller
     public function index()
     {
         $type = $this->input->get('type');
+        $status = $this->input->get('status');
 
         $data['title'] = 'User';
-        $data['user'] = $this->user_model->get_user_filtered($type);
+        $data['user'] = $this->user_model->get_user_filtered($type, $status);
         $data['bandwith'] = $this->db->get('bandwith')->result();
         $data['sesi'] = $this->db->get('sesi')->result();
         $data['site'] = $this->site_model->get_all();
@@ -33,6 +34,7 @@ class User extends CI_Controller
         $this->load->view('user', $data);
         $this->load->view('templates/footer');
     }
+
 
     public function get_kodepelanggan($site_id)
     {

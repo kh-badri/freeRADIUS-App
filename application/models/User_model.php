@@ -46,20 +46,31 @@ class User_model extends CI_Model
     /**
      * Ambil semua data user dengan optional filter tipe
      */
-    public function get_user_filtered($type = null)
+    public function get_user_filtered($type = null, $status = null)
     {
+        $today = date('Y-m-d');
+
         $this->db->select('user.*, user.kategori, user.koneksi, site.namasite as site, bandwith.namapaket, bandwith.harga as tarif, sesi.namasesi');
         $this->db->from('user');
         $this->db->join('site', 'site.id_site = user.site_id', 'left');
         $this->db->join('bandwith', 'bandwith.id_bw = user.bandwith_id', 'left');
         $this->db->join('sesi', 'sesi.id_sesi = user.sesi_id', 'left');
 
+        // Filter berdasarkan tipe (home / voucher)
         if (!empty($type)) {
             $this->db->where('user.type', $type);
         }
 
+        // Filter berdasarkan status (aktif / expired)
+        if ($status == 'aktif') {
+            $this->db->where('user.expiration >=', $today);
+        } elseif ($status == 'expired') {
+            $this->db->where('user.expiration <', $today);
+        }
+
         return $this->db->get()->result();
     }
+
 
     /**
      * Ambil data lengkap user dari suatu tabel (digunakan untuk listing)
