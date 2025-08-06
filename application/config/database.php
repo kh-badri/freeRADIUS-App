@@ -75,7 +75,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'      => '',
-	'hostname' => 'localhost',
+	'hostname' => '103.146.26.198',
 	'username' => 'radiusadmin',
 	'password' => 'myStr0nP@ssW0rd',
 	'database' => 'radiusdb',
