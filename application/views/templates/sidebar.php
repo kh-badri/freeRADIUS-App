@@ -35,7 +35,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="<?= base_url('dashboard') ?>" class="brand-link">
-        <span class="ml-2 brand-text font-weight-bold" style="color:#F3F7EC;">FreeRADIUS Billing </span>
+        <span class="ml-4 brand-text font-weight-bold" style="color:#F3F7EC;">FreeRADIUS</span>
       </a>
       <!-- Sidebar -->
       <div class="sidebar">
