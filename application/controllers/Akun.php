@@ -56,62 +56,69 @@ class Akun extends CI_Controller
     {
         $user_id = $this->session->userdata('user_id');
 
-        $this->form_validation->set_rules('username', 'Username', 'required');
-        $this->form_validation->set_rules('nama', 'Nama', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-        $this->form_validation->set_rules('no_hp', 'Nomor HP', 'required');
+        // Rules validasi form data teks
+        $this->form_validation->set_rules('username', 'Username', 'trim|required');
+        $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+        $this->form_validation->set_rules('no_hp', 'Nomor HP', 'trim|required|numeric');
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->index(); // tampil ulang halaman dengan error
-        } else {
-            $data = [
-                'username' => $this->input->post('username'),
-                'nama'     => $this->input->post('nama'),
-                'email'    => $this->input->post('email'),
-                'no_hp'    => $this->input->post('no_hp'),
-            ];
-
-            $foto_lama = $this->input->post('foto_lama');
-            $upload_path = './uploads/foto_profil/';
-
-            if (!empty($_FILES['foto']['name'])) {
-                if (!is_dir($upload_path)) {
-                    mkdir($upload_path, 0755, true);
-                }
-
-                $config['upload_path']   = $upload_path;
-                $config['allowed_types'] = 'jpg|jpeg|png|gif';
-                $config['max_size']      = 2048;
-                $config['encrypt_name']  = TRUE;
-
-                $this->upload->initialize($config);
-
-                if ($this->upload->do_upload('foto')) {
-                    $upload_data = $this->upload->data();
-                    $data['foto'] = $upload_data['file_name'];
-
-                    // Update session foto agar sidebar ikut berubah
-                    $this->session->set_userdata('foto', $upload_data['file_name']);
-
-                    // Hapus foto lama jika ada
-                    if (!empty($foto_lama) && file_exists($upload_path . $foto_lama)) {
-                        unlink($upload_path . $foto_lama);
-                    }
-                } else {
-                    log_message('error', 'Upload gagal: ' . $this->upload->display_errors());
-                    $this->session->set_flashdata('error', strip_tags($this->upload->display_errors()));
-                    redirect('akun');
-                }
-            }
-
-            if ($this->Akun_model->update_akun($user_id, $data)) {
-                $this->session->set_flashdata('message', 'Data akun berhasil diperbarui.');
-            } else {
-                $this->session->set_flashdata('error', 'Gagal memperbarui data akun.');
-            }
-
+        // Cek validasi form data teks
+        if ($this->form_validation->run() === FALSE) {
+            // Jika validasi gagal, tampilkan error dan kembali
+            $this->session->set_flashdata('error', validation_errors());
             redirect('akun');
         }
+
+        // Jika validasi form berhasil, lanjutkan proses
+        $data = [
+            'username' => $this->input->post('username', TRUE),
+            'nama'     => $this->input->post('nama', TRUE),
+            'email'    => $this->input->post('email', TRUE),
+            'no_hp'    => $this->input->post('no_hp', TRUE),
+        ];
+
+        $foto_lama = $this->input->post('foto_lama', TRUE);
+        $upload_path = './uploads/foto_profil/';
+
+        // Logika upload foto hanya berjalan jika ada file baru
+        if (!empty($_FILES['foto']['name'])) {
+            // Pastikan direktori ada
+            if (!is_dir($upload_path)) {
+                mkdir($upload_path, 0755, true);
+            }
+
+            $config['upload_path']   = $upload_path;
+            $config['allowed_types'] = 'jpg|jpeg|png|gif';
+            $config['max_size']      = 2048; // Maksimum 2 MB
+            $config['encrypt_name']  = TRUE;
+
+            $this->upload->initialize($config);
+
+            if ($this->upload->do_upload('foto')) {
+                $upload_data = $this->upload->data();
+                $data['foto'] = $upload_data['file_name'];
+
+                $this->session->set_userdata('foto', $upload_data['file_name']);
+
+                if (!empty($foto_lama) && $foto_lama !== 'default.png' && file_exists($upload_path . $foto_lama)) {
+                    unlink($upload_path . $foto_lama);
+                }
+            } else {
+                // Ini adalah bagian kritis! Pesan error dari CodeIgniter harus ditampilkan
+                $error = $this->upload->display_errors('', '');
+                $this->session->set_flashdata('error', 'Gagal mengunggah foto: ' . strip_tags($error));
+                redirect('akun');
+            }
+        }
+
+        // Lakukan update data di model
+        if ($this->Akun_model->update_akun($user_id, $data)) {
+            $this->session->set_flashdata('message', 'Data akun berhasil diperbarui.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal memperbarui data akun.');
+        }
+
+        redirect('akun');
     }
 
 
