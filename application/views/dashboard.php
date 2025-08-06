@@ -60,7 +60,7 @@
 
             <!-- Total Voucher -->
             <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
-                <div class="small-box" style="background-color: #FF2E63;">
+                <div class="small-box" style="background-color: #3674B5;">
                     <div class="inner">
                         <h3><?= $total_voucher; ?></h3>
                         <p>Total Voucher</p>
@@ -75,7 +75,7 @@
             </div>
             <!-- Voucher Aktif -->
             <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
-                <div class="small-box" style="background-color: rgb(13, 161, 63);">
+                <div class="small-box" style="background-color: #03A6A1;">
                     <div class="inner">
                         <h3><?= $total_voucher_aktif; ?></h3>
                         <p>Voucher Aktif</p>
@@ -90,7 +90,7 @@
             </div>
             <!-- Voucher Expired -->
             <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
-                <div class="small-box bg-warning">
+                <div class="small-box" style="background-color: rgb(231, 76, 60);">
                     <div class="inner">
                         <h3><?= $total_voucher_expired; ?></h3>
                         <p>Voucher Expired</p>
@@ -105,7 +105,7 @@
             </div>
             <!-- Total Nas -->
             <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-4 text-white">
-                <div class="small-box" style="background-color:rgb(96, 93, 93);">
+                <div class="small-box" style="background-color: #437057;">
                     <div class="inner">
                         <h3><?= $total_nas; ?></h3>
                         <p>Total Nas <i class="" aria-hidden="true"></i></p>
@@ -113,7 +113,7 @@
                     <div class="icon">
                         <i class="fas fa-network-wired"></i>
                     </div>
-                    <a href="<?= base_url('nas') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url('nas') ?>" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 </section>
