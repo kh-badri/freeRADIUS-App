@@ -45,13 +45,13 @@
             <td><?= $ssw->secret ?></td>
             <td><?= $ssw->community ?></td>
             <td>
-              <button data-toggle="modal" data-target="#edit<?= $ssw->id_nas ?>" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+              <button data-toggle="modal" data-target="#edit<?= $ssw->id ?>" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
               <?php
               // Ambil role user dari session
               $role = $this->session->userdata('role');
               ?>
               <a
-                href="<?= base_url('nas/delete/' . $ssw->id_nas) ?>"
+                href="<?= base_url('nas/delete/' . $ssw->id) ?>"
                 class="btn btn-danger btn-sm"
                 <?php if ($role !== 'admin'): ?>
                 onclick="event.preventDefault(); showAccessDeniedAlert();"
@@ -70,7 +70,7 @@
 
 <!-- Modal Edit -->
 <?php foreach ($nas as $ssw) { ?>
-  <div class="modal fade" id="edit<?= $ssw->id_nas ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="edit<?= $ssw->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -80,7 +80,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form action="<?= base_url('nas/edit/' . $ssw->id_nas) ?>" method="post" class="ml-2">
+          <form action="<?= base_url('nas/edit/' . $ssw->id) ?>" method="post" class="ml-2">
             <div class="form-group">
               <label>IP Address</label>
               <input type="text" name="nasname" class="form-control" placeholder="IP Server" value="<?= $ssw->nasname ?>">

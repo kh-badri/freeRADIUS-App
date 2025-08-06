@@ -55,14 +55,14 @@ class Nas extends CI_Controller
             redirect('nas');
         }
     }
-    public function edit($id_nas)
+    public function edit($id)
     {
         $this->_rules();
         if ($this->form_validation->run() == FALSE) {
             $this->index();
         } else {
             $data = array(
-                'id_nas' => $id_nas,
+                'id' => $id,
                 'nasname' => $this->input->post('nasname'),
                 'shortname' => $this->input->post('shortname'),
                 'type' => $this->input->post('type'),
@@ -96,7 +96,7 @@ class Nas extends CI_Controller
 
     public function delete($id)
     {
-        $where = array('id_nas' => $id);
+        $where = array('id' => $id);
         $this->nas_model->delete($where, 'nas');
         $this->session->set_flashdata('pesan', 'Data Berhasil Dihapus !');
         redirect('nas');

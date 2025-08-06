@@ -14,14 +14,12 @@ class Nas_model extends CI_Model
     }
     public function update_data($data, $table)
     {
-        $this->db->where('id_nas', $data['id_nas']);
+        $this->db->where('id', $data['id']);
         $this->db->update($table, $data);
     }
-    public function delete($where, $table) 
+    public function delete($where, $table)
     {
         $this->db->where($where);
         $this->db->delete($table);
     }
 }
-
-
