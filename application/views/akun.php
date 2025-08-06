@@ -148,10 +148,13 @@
                     <label>Foto Profil</label>
                     <?php if (!empty($akun->foto)): ?>
                         <div style="margin-bottom: 10px;">
-                            <img src="<?= base_url('uploads/foto_profil/' . htmlspecialchars($akun->foto, ENT_QUOTES, 'UTF-8')) ?>"
-                                alt="Foto Sekarang"
-                                class="img-thumbnail"
-                                style="width: 120px; height: 120px;">
+                            <img
+                                src="<?= !empty($akun->foto) && file_exists('uploads/foto_profil/' . $akun->foto)
+                                            ? base_url('uploads/foto_profil/' . htmlspecialchars($akun->foto, ENT_QUOTES, 'UTF-8')) . '?v=' . time()
+                                            : base_url('assets/images/default.png') . '?v=' . time() ?>"
+                                alt="Foto Profil"
+                                class="avatar-profile"
+                                onclick="openModal(this.src)">
                         </div>
                     <?php endif; ?>
                     <!-- Input untuk upload file baru -->
